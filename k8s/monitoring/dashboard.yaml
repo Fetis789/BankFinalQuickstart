@@ -57,7 +57,7 @@ data:
           ]
         },
         {
-          "id": 6, "type": "timeseries", "title": "Доля клиентов с положительным прогнозом
+          "id": 6, "type": "timeseries", "title": "Доля клиентов с положительным прогнозом",
           "gridPos": {"x": 0, "y": 13, "w": 12, "h": 8},
           "datasource": {"type": "prometheus", "uid": "prometheus"},
           "fieldConfig": {"defaults": {"unit": "percentunit", "min": 0, "max": 1}},
