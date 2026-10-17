@@ -14,7 +14,7 @@ COMMON = dict(namespace = "mlops", in_cluster = True,
     catchup=False,
     params = {
         "DEPTH": Param(6, type="integer", description="Глубина деревьев в Catboost"),
-    }
+    },
     tags = ["bank"]
 )
 def bank_retrain():
@@ -59,7 +59,9 @@ def bank_retrain():
 
     @task.short_circuit
     def promoted(result: dict) -> bool:
-        print(f"версия {result['version']}, pr_auc {result['pr_auc']}, pr_auc до этого у champion {result['champion_pr_auc_before']}")
+        print(f"версия {result['version']}")
+        print(f"pr_auc {result['pr_auc']}") 
+        print(f"pr_auc до этого у champion {result['champion_pr_auc_before']}")
         return result['promoted']
 
     @task
@@ -70,7 +72,8 @@ def bank_retrain():
         now = datetime.now(UTC).isoformat()
         client.AppsV1Api().patch_namespaced_deployment(
             "bank-service", "default",
-            {"spec": {"template": {"metadata": {"annotations": {"kubectl.kubernetes.io/restartedAt": now}}}}}
+            {"spec": {"template": {"metadata": {"annotations": {
+                "kubectl.kubernetes.io/restartedAt": now}}}}}
         )
         print("Инициирован перезапуск bank-service", now)
     

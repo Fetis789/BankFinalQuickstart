@@ -20,9 +20,19 @@ ROWS = pa.DataFrameSchema(
         "cons.conf.idx": pa.Column(float, pa.Check.in_range(-60, 0)),
         "euribor3m": pa.Column(float, pa.Check.in_range(0, 10)),
         "nr.employed": pa.Column(float, pa.Check.in_range(3000, 7000)),
-        "job": pa.Column(str, pa.Check.isin(["admin.", "blue-collar", "entrepreneur", "housemaid", "management", "retired", "self-employed", "services", "student", "technician", "unemployed", "unknown", "wild.card"])),
-        "education": pa.Column(str, pa.Check.isin(["basic.4y", "basic.6y", "basic.9y", "high.school", "professional.course", "university.degree", "unknown", "illiterate"])),
-        "month": pa.Column(str, pa.Check.isin(["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"])),
+        "job": pa.Column(str, pa.Check.isin(["admin.", "blue-collar", "entrepreneur",
+                                            "housemaid", "management", "retired", 
+                                            "self-employed", "services", "student", 
+                                            "technician", "unemployed", "unknown", 
+                                            "wild.card"])),
+        "education": pa.Column(str, pa.Check.isin(["basic.4y", "basic.6y", "basic.9y", 
+                                                "high.school", "professional.course", 
+                                                "university.degree", "unknown", 
+                                                "illiterate"])),
+        "month": pa.Column(str, pa.Check.isin(["jan", "feb", "mar", 
+                                                "apr", "may", "jun", 
+                                                "jul", "aug", "sep", 
+                                                "oct", "nov", "dec"])),
         "day_of_week": pa.Column(str, pa.Check.isin(["mon", "tue", "wed", "thu", "fri"])),
         "y": pa.Column(str, pa.Check.isin(["yes", "no"])),
     }
@@ -32,11 +42,20 @@ ROWS = pa.DataFrameSchema(
 EXPORT = pa.DataFrameSchema(
     ROWS.columns,
     checks =[
-        pa.Check(lambda df: len(df) >= 10000, error = "Слишком маленький датасет. Меньше 10 тысяч строк"),
+        pa.Check(
+                lambda df: len(df) >= 10000, 
+                error = "Слишком маленький датасет. Меньше 10 тысяч строк"
+                ),
         pa.Check(lambda df: len(df[df['y'] == 'yes']) > 0, error = "Нет положительных случаев"),
         pa.Check(lambda df: len(df[df['y'] == 'no']) > 0, error = "Нет отрицательных случаев"),
-        pa.Check(lambda df: df["y"].eq("yes").mean() < 0.5, error = 'Слишком много положительных случаев'),
-        pa.Check(lambda df: df["y"].eq("yes").mean() > 0.01, error = 'Слишком мало положительных случаев'),
+        pa.Check(
+                lambda df: df["y"].eq("yes").mean() < 0.5, 
+                error = 'Слишком много положительных случаев'
+                ),
+        pa.Check(
+                lambda df: df["y"].eq("yes").mean() > 0.01, 
+                error = 'Слишком мало положительных случаев'
+                ),
     ]
     #strict = True
 )
@@ -60,7 +79,12 @@ def main() -> int:
             EXPORT.validate(df, lazy=True)
         except pa.errors.SchemaErrors as e:
             fc = e.failure_cases
-            summary = fc.groupby(["column", "check"], dropna=False).size().rename("cases").reset_index()
+            summary = (
+                fc.groupby(["column", "check"], dropna=False)
+                .size()
+                .rename("cases")
+                .reset_index()
+            )
             with tempfile.TemporaryDirectory() as tmp:
                 fc.head(1000).to_csv(Path(tmp) / "failure_cases.csv", index=False)
                 mlflow.log_artifact(str(Path(tmp) / "failure_cases.csv"))

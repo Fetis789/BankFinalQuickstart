@@ -1,6 +1,6 @@
+import pandas as pd
 import pytest
 from fastapi.testclient import TestClient
-import pandas as pd
 
 from bank.service.app import app
 

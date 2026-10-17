@@ -1,7 +1,8 @@
+import pandera.pandas as pa
 import pytest
 
-from bank.data import ROWS, EXPORT
-import pandera.pandas as pa
+from bank.data import EXPORT, ROWS
+
 
 # С данными все норм
 def test_validation(bank_test):
