@@ -12,6 +12,9 @@ COMMON = dict(namespace = "mlops", in_cluster = True,
 @dag(
     schedule = CronTriggerTimetable("0 3 * * *", timezone = "Europe/Moscow"),
     catchup=False,
+    params = {
+        "DEPTH": Param(6, type="integer", description="Глубина деревьев в Catboost"),
+    }
     tags = ["bank"]
 )
 def bank_retrain():
@@ -43,7 +46,8 @@ def bank_retrain():
         )
         ],
         env_vars = {
-            "MLFLOW_TRACKING_URI": "http://mlflow.mlops:5000"
+            "MLFLOW_TRACKING_URI": "http://mlflow.mlops:5000",
+            "DEPTH": "{{ params.DEPTH }}"
         },
         env_from = [
             k8s.V1EnvFromSource(secret_ref=k8s.V1SecretEnvSource(name="s3-credentials"))
