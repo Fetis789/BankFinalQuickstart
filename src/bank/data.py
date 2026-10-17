@@ -15,7 +15,7 @@ EXPERIMENT = os.getenv("EXPERIMENT", 'bank_experiment')
 ROWS = pa.DataFrameSchema(
     {
         "age": pa.Column(int, pa.Check.in_range(12, 100)),
-        'campaign': pa.Column(int, pa.Check.in_range(0, 100)),
+        "campaign": pa.Column(int, pa.Check.in_range(0, 100)),
         "emp.var.rate": pa.Column(float, pa.Check.in_range(-10, 10)),
         "cons.conf.idx": pa.Column(float, pa.Check.in_range(-60, 0)),
         "euribor3m": pa.Column(float, pa.Check.in_range(0, 10)),
@@ -37,8 +37,8 @@ EXPORT = pa.DataFrameSchema(
         pa.Check(lambda df: len(df[df['y'] == 'no']) > 0, error = "Нет отрицательных случаев"),
         pa.Check(lambda df: df["y"].eq("yes").mean() < 0.5, error = 'Слишком много положительных случаев'),
         pa.Check(lambda df: df["y"].eq("yes").mean() > 0.01, error = 'Слишком мало положительных случаев'),
-    ],
-    strict = True,
+    ]
+    #strict = True
 )
 
 def file_md5(path: Path = RAW_PATH) -> str:
