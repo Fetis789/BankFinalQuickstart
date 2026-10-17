@@ -9,7 +9,7 @@ import pandas as pd
 import pandera.pandas as pa
 
 RAW_PATH = Path(os.getenv("DATA_PATH", 'datasets/bank_additional_pre.csv'))
-EXPERIMENT = os.getenv("EXPERIMENT", 'bank_experiment')
+EXPERIMENT_NAME = os.getenv("EXPERIMENT_NAME", 'bank_experiment')
 
 # Правила для каждой строки
 ROWS = pa.DataFrameSchema(
@@ -52,7 +52,7 @@ def main() -> int:
 
     df = load_data(RAW_PATH)
     md5 = file_md5(RAW_PATH)
-    mlflow.set_experiment(EXPERIMENT)
+    mlflow.set_experiment(EXPERIMENT_NAME)
     with mlflow.start_run(run_name = 'validate'):
         mlflow.log_params({"step": "validate", "data": str(RAW_PATH), "data_md5": md5})
         mlflow.log_metrics({"num_rows": len(df)})

@@ -19,6 +19,7 @@ dependencies = [
     "prometheus-client>=0.26.0",
     "prometheus-fastapi-instrumentator>=8.1.0",
     "pandera>=0.34.1",
+    "dvc[s3]>=3.67.1",
 ]
 
 [dependency-groups]
@@ -27,7 +28,6 @@ dev = [
     "httpx",
     "locust",
     "ruff",
-    "dvc>=3.67.1",
     "dvc-s3>=3.3.0",
 ]
 
