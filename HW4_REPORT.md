@@ -52,6 +52,10 @@ kubectl set image deployment/bank-service api=bank-service:1.0
 В третьем даге в данных я поменял значения age, умножив их на 1000. Пулл реквест, в котором поменял датасет - https://github.com/Fetis789/BankMarketingPetModel/actions/runs/39067479676. Соответственно, валидация не прошла.
 ![Скрин третий даг](images/homework4/third_bad_data_screen.png)
 
+Пока делал ДЗ, проморгал требование сделать скрин чемпиона в grafana. Поэтому дальше сделал его отдельно далее (когда писал отчет и увидел это за 15 минут до дедлайна). Кидаю скрин смены чемпиона в grafana и alias моделей в mlflow, а также скрин дагов, которые привели к этой смене.
+![Графана смена](images/homework4/champ_change_grafana.png)
+![Модели в mlflow](images/homework4/mlflow_models.png)
+![Скрин дагов](images/homework4/dags_screen_all.png)
 
 
 
